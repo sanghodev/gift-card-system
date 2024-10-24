@@ -5,7 +5,7 @@ import GiftCertificate from '@/models/GiftCertificate';
 
 export async function GET(request: Request) {
   await dbConnect();
-
+  const data: unknown = await someAsyncFunction();
   const { search, amount, isUsed, from, to, limit = 50, page = 1 } = Object.fromEntries(new URL(request.url).searchParams);
 
   const query: any = {};
