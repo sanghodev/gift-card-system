@@ -28,7 +28,7 @@ const UsedVoucherList = () => {
 
   useEffect(() => {
     fetchUsedVouchers();
-  }, [limit, page]);
+  }, [limit, page, fetchUsedVouchers]);
 
   const handleLimitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLimit(Number(e.target.value));
