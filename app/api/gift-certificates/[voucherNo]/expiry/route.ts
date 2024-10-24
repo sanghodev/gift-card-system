@@ -21,6 +21,7 @@ export async function PUT(request: Request, { params }: { params: { voucherNo: s
 
     return NextResponse.json(updatedVoucher);
   } catch (error) {
+    console.error(error); 
     return NextResponse.json({ error: 'Failed to update expiry' }, { status: 500 });
   }
 }

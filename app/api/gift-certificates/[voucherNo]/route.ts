@@ -17,6 +17,7 @@ export async function GET(request: Request, { params }: { params: { voucherNo: s
 
     return NextResponse.json(giftCard);
   } catch (error) {
+    console.error(error);
     return NextResponse.json({ error: 'Failed to retrieve gift certificate' }, { status: 500 });
   }
 }
