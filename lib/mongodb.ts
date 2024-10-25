@@ -22,7 +22,9 @@ async function dbConnect() {
   if (!cached.promise) {
     cached.promise = mongoose.connect(MONGODB_URI, {
       bufferCommands: false,
-    }).then((mongoose) => mongoose);
+    }).then((mongooseInstance) => {
+      return mongooseInstance.connection;  // mongooseInstance에서 connection 객체만 반환
+    });
   }
 
   cached.conn = await cached.promise;
