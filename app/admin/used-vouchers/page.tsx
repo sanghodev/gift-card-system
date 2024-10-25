@@ -2,8 +2,17 @@
 
 import { useEffect, useState, useCallback } from 'react';
 
+// 바우처 타입 정의
+interface Voucher {
+  voucherNo: string;
+  amount: number;
+  expiry: string;
+  isUsed: boolean;
+  createdAt: string;
+}
+
 const UsedVoucherList = () => {
-  const [vouchers, setVouchers] = useState([]);
+  const [vouchers, setVouchers] = useState<Voucher[]>([]); // Voucher 타입 배열로 상태 정의
   const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(50); // 50개 또는 100개 단위
@@ -21,14 +30,14 @@ const UsedVoucherList = () => {
     const response = await fetch(`/api/gift-certificates?${query.toString()}`);
     const data = await response.json();
 
-    setVouchers(data.vouchers);
+    setVouchers(data.vouchers); // 상태 업데이트
     setTotal(data.total);
     setLoading(false);
-  }, [limit, page]); // 의존성 배열에서 limit과 page만 추가
+  }, [limit, page]); // limit과 page를 의존성으로 사용
 
   useEffect(() => {
     fetchUsedVouchers();
-  }, [fetchUsedVouchers]); // 의존성 배열에 메모이제이션된 fetchUsedVouchers만 포함
+  }, [fetchUsedVouchers]); // 의존성 배열에 메모이제이션된 fetchUsedVouchers
 
   const handleLimitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLimit(Number(e.target.value));
@@ -74,7 +83,7 @@ const UsedVoucherList = () => {
             <th className="px-4 py-2">Expiry</th>
             <th className="px-4 py-2">Used</th>
             <th className="px-4 py-2">Created At</th>
-            <th className="px-4 py-2">Actions</th> {/* 액션 버튼 */}
+            <th className="px-4 py-2">Actions</th>
           </tr>
         </thead>
         <tbody>
