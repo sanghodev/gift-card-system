@@ -32,6 +32,7 @@ const CreateGiftCard = () => {
     if (response.ok) {
       const data = await response.json();
       setVoucherDetails(data); // 바우처 정보 설정
+      console.log("Voucher Details: ", data); 
       setSuccess(true);
       setAmount(30); // 입력 값 초기화
       setExpiry('');
@@ -53,7 +54,7 @@ const CreateGiftCard = () => {
           <h2 className="text-lg font-semibold">Gift Card Created Successfully!</h2>
           <p><strong>Voucher No:</strong> {voucherDetails.voucherNo}</p>
           <p><strong>Amount:</strong> ${voucherDetails.amount}</p> {/* Amount 수정 */}
-          
+          {console.log("Amount in JSX:", voucherDetails.amount)} {/* 여기서 콘솔에 amount 확인 */}
           <p><strong>Expiry Date:</strong> {new Date(voucherDetails.expiry).toLocaleDateString()}</p>
 
           {voucherDetails.note && <p><strong>Note:</strong> {voucherDetails.note}</p>}
