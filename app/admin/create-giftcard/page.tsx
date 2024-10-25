@@ -11,7 +11,7 @@ interface VoucherDetails {
 }
 
 const CreateGiftCard = () => {
-  const [amount, setAmount] = useState(30);
+  const [amount, setAmount] = useState<number>(30); // 숫자 타입으로 설정
   const [expiry, setExpiry] = useState('');
   const [note, setNote] = useState(''); 
   const [loading, setLoading] = useState(false);
@@ -33,7 +33,7 @@ const CreateGiftCard = () => {
       const data = await response.json();
       setVoucherDetails(data); // 바우처 정보 설정
       setSuccess(true);
-      setAmount(30);
+      setAmount(30); // 입력 값 초기화
       setExpiry('');
       setNote(''); 
     } else {
@@ -52,7 +52,7 @@ const CreateGiftCard = () => {
         <div className="mb-6 p-4 bg-green-100 border border-green-300 text-green-700 rounded-lg">
           <h2 className="text-lg font-semibold">Gift Card Created Successfully!</h2>
           <p><strong>Voucher No:</strong> {voucherDetails.voucherNo}</p>
-          <p><strong>Amount:</strong> ${voucherDetails.amount}</p>
+          <p><strong>Amount:</strong> ${voucherDetails.amount}</p> {/* Amount 수정 */}
           
           <p><strong>Expiry Date:</strong> {new Date(voucherDetails.expiry).toLocaleDateString()}</p>
 
