@@ -2,9 +2,17 @@
 
 import { useState } from 'react';
 
+interface Voucher {
+  voucherNo: string;
+  amount: number;
+  expiry: string;
+  isUsed: boolean;
+  note?: string;
+}
+
 const CheckVoucher = () => {
   const [voucherNo, setVoucherNo] = useState('');
-  const [result, setResult] = useState<any>(null); // 조회 결과 저장
+  const [result, setResult] = useState<Voucher | null>(null); // 조회 결과를 Voucher 타입으로 설정
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -13,15 +21,22 @@ const CheckVoucher = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    const response = await fetch(`/api/gift-certificates/${voucherNo}`);
-    const data = await response.json();
-    if (response.ok) {
-      setResult(data);
-    } else {
-      setResult(null);
-      setError(data.error || 'Failed to fetch voucher');
+    setResult(null);
+
+    try {
+      const response = await fetch(`/api/gift-certificates/${voucherNo}`);
+      const data = await response.json();
+
+      if (response.ok) {
+        setResult(data as Voucher); // 응답 데이터를 Voucher 타입으로 지정
+      } else {
+        setError(data.error || 'Failed to fetch voucher');
+      }
+    } catch (err: unknown) {
+      setError('An error occurred while fetching the voucher');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const formatExpiryDate = (expiry: string) => {
@@ -33,18 +48,22 @@ const CheckVoucher = () => {
   const markAsUsed = async () => {
     if (!result) return;
 
-    const response = await fetch(`/api/gift-certificates/${voucherNo}/toggle-used`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ isUsed: true }), // 사용 여부를 true로 설정
-    });
+    try {
+      const response = await fetch(`/api/gift-certificates/${voucherNo}/toggle-used`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isUsed: true }), // 사용 여부를 true로 설정
+      });
 
-    const data = await response.json();
-    if (response.ok) {
-      alert('Voucher marked as used');
-      setResult({ ...result, isUsed: true }); // 사용 여부 업데이트
-    } else {
-      alert(`Failed to update usage status: ${data.error}`);
+      const data = await response.json();
+      if (response.ok) {
+        alert('Voucher marked as used');
+        setResult({ ...result, isUsed: true }); // 사용 여부 업데이트
+      } else {
+        alert(`Failed to update usage status: ${data.error}`);
+      }
+    } catch (err: unknown) {
+      alert('An error occurred while updating the voucher');
     }
   };
 
@@ -64,12 +83,11 @@ const CheckVoucher = () => {
             type="submit"
             className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
           >
-            Check Voucher
+            {loading ? 'Checking...' : 'Check Voucher'}
           </button>
         </form>
 
         {loading && <p className="mt-4">Loading...</p>}
-
         {error && <p className="mt-4 text-red-500">{error}</p>}
 
         {result && (
