@@ -33,7 +33,11 @@ const CheckVoucher = () => {
         setError(data.error || 'Failed to fetch voucher');
       }
     } catch (err: unknown) {
-      setError('An error occurred while fetching the voucher');
+      if (err instanceof Error) {
+        setError(err.message); // 에러 메시지 표시
+      } else {
+        setError('An unexpected error occurred while fetching the voucher');
+      }
     } finally {
       setLoading(false);
     }
@@ -63,7 +67,11 @@ const CheckVoucher = () => {
         alert(`Failed to update usage status: ${data.error}`);
       }
     } catch (err: unknown) {
-      alert('An error occurred while updating the voucher');
+      if (err instanceof Error) {
+        alert(`Error updating voucher status: ${err.message}`);
+      } else {
+        alert('An unexpected error occurred while updating the voucher');
+      }
     }
   };
 
@@ -78,10 +86,12 @@ const CheckVoucher = () => {
             value={voucherNo}
             onChange={(e) => setVoucherNo(e.target.value)}
             className="block w-full border border-gray-300 rounded p-2 mb-4"
+            disabled={loading} // 로딩 중일 때 입력 비활성화
           />
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+            className={`w-full text-white py-2 rounded ${loading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'}`}
+            disabled={loading} // 로딩 중일 때 버튼 비활성화
           >
             {loading ? 'Checking...' : 'Check Voucher'}
           </button>
@@ -107,6 +117,7 @@ const CheckVoucher = () => {
               <button
                 onClick={markAsUsed}
                 className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 mt-4"
+                disabled={loading} // 로딩 중일 때 버튼 비활성화
               >
                 Mark as Used
               </button>
