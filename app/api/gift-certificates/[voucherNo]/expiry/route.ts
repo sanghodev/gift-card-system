@@ -4,10 +4,16 @@ import dbConnect from '@/lib/mongodb';
 import GiftCertificate from '@/models/GiftCertificate';
 import { NextRequest } from 'next/server';
 
-export async function PUT(request: NextRequest, { params }: { params: { voucherNo: string } }) {
-  await dbConnect(); // MongoDB 연결
+interface Context {
+  params: {
+    voucherNo: string;
+  };
+}
 
-  const { voucherNo } = params;
+export async function PUT(request: NextRequest, context: Context) {
+  await dbConnect();
+
+  const { voucherNo } = context.params;
 
   if (!voucherNo) {
     return NextResponse.json({ error: 'Voucher number is required' }, { status: 400 });
@@ -20,13 +26,11 @@ export async function PUT(request: NextRequest, { params }: { params: { voucherN
       return NextResponse.json({ error: 'Expiry date is required' }, { status: 400 });
     }
 
-    // 만료일을 Date 객체로 변환
     const expiryDate = new Date(expiry);
     if (isNaN(expiryDate.getTime())) {
       return NextResponse.json({ error: 'Invalid expiry date format' }, { status: 400 });
     }
 
-    // 바우처 만료일 업데이트
     const updatedVoucher = await GiftCertificate.findOneAndUpdate(
       { voucherNo },
       { expiry: expiryDate },
