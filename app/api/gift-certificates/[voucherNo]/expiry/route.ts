@@ -2,8 +2,9 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import GiftCertificate from '@/models/GiftCertificate';
+import { NextRequest } from 'next/server';
 
-export async function PUT(request: Request, { params }: { params: { voucherNo: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: { voucherNo: string } }) {
   await dbConnect(); // MongoDB 연결
 
   const { voucherNo } = params;
