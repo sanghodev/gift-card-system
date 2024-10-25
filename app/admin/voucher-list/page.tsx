@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 const VoucherList = () => {
   const [vouchers, setVouchers] = useState([]);
@@ -14,7 +14,8 @@ const VoucherList = () => {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
 
-  const fetchVouchers = async () => {
+  // fetchVouchers 함수 메모이제이션
+  const fetchVouchers = useCallback(async () => {
     setLoading(true);
     const query = new URLSearchParams({
       limit: limit.toString(),
@@ -32,11 +33,11 @@ const VoucherList = () => {
     setVouchers(data.vouchers);
     setTotal(data.total);
     setLoading(false);
-  };
+  }, [limit, page, search, amountFilter, isUsedFilter, fromDate, toDate]);
 
   useEffect(() => {
     fetchVouchers();
-  }, [limit, page, search, amountFilter, isUsedFilter, fromDate, toDate, fetchVouchers]);
+  }, [fetchVouchers]); // fetchVouchers 함수가 변경될 때만 호출
 
   const handleLimitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLimit(Number(e.target.value));
