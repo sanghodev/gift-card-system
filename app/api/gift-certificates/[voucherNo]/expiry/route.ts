@@ -2,12 +2,14 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import GiftCertificate from '@/models/GiftCertificate';
-import type { NextRequest } from 'next/server';
+import { NextRequest } from 'next/server';
 
-export async function PUT(request: NextRequest, { params }: { params: { voucherNo: string } }) {
+export async function PUT(request: NextRequest) {
   await dbConnect();
 
-  const { voucherNo } = params;
+  // URL에서 voucherNo 추출
+  const { pathname } = new URL(request.url);
+  const voucherNo = pathname.split('/').slice(-2)[0]; // [voucherNo] 추출
 
   if (!voucherNo) {
     return NextResponse.json({ error: 'Voucher number is required' }, { status: 400 });
