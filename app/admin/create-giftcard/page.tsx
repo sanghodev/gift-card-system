@@ -2,13 +2,21 @@
 
 import { useState } from 'react';
 
+// 바우처 세부 정보 타입 정의
+interface VoucherDetails {
+  voucherNo: string;
+  amount: number;
+  expiry: string;
+  note?: string;
+}
+
 const CreateGiftCard = () => {
   const [amount, setAmount] = useState(30);
   const [expiry, setExpiry] = useState('');
   const [note, setNote] = useState(''); 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [voucherDetails, setVoucherDetails] = useState(null); 
+  const [voucherDetails, setVoucherDetails] = useState<VoucherDetails | null>(null); // 초기값 null로 설정
 
   const createGiftCard = async () => {
     setLoading(true);
@@ -23,13 +31,13 @@ const CreateGiftCard = () => {
 
     if (response.ok) {
       const data = await response.json();
-      setVoucherDetails(data);
+      setVoucherDetails(data); // 바우처 정보 설정
       setSuccess(true);
       setAmount(30);
       setExpiry('');
       setNote(''); 
     } else {
-      setSuccess(false); 
+      setSuccess(false); // 실패 시 처리
     }
 
     setLoading(false);
@@ -44,10 +52,9 @@ const CreateGiftCard = () => {
         <div className="mb-6 p-4 bg-green-100 border border-green-300 text-green-700 rounded-lg">
           <h2 className="text-lg font-semibold">Gift Card Created Successfully!</h2>
           <p><strong>Voucher No:</strong> {voucherDetails.voucherNo}</p>
-          <p><strong>Amount:</strong> ${amount}</p>
+          <p><strong>Amount:</strong> ${voucherDetails.amount}</p>
           
-          {/* 클라이언트에서만 렌더링되도록 보장 */}
-          <p><strong>Expiry Date:</strong> {typeof window !== 'undefined' ? new Date(voucherDetails.expiry).toLocaleDateString() : ''}</p>
+          <p><strong>Expiry Date:</strong> {new Date(voucherDetails.expiry).toLocaleDateString()}</p>
 
           {voucherDetails.note && <p><strong>Note:</strong> {voucherDetails.note}</p>}
         </div>
@@ -82,7 +89,9 @@ const CreateGiftCard = () => {
         <button
           onClick={createGiftCard}
           disabled={loading}
-          className={`py-3 px-6 rounded-lg text-white font-semibold transition-colors ${loading ? 'bg-gray-400' : 'bg-primary hover:bg-blue-700'}`}
+          className={`py-3 px-6 rounded-lg text-white font-semibold transition-colors ${
+            loading ? 'bg-gray-400' : 'bg-primary hover:bg-blue-700'
+          }`}
         >
           {loading ? 'Creating...' : 'Create Gift Card'}
         </button>
