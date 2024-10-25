@@ -2,8 +2,18 @@
 
 import { useEffect, useState, useCallback } from 'react';
 
+// 바우처 타입 정의
+interface Voucher {
+  voucherNo: string;
+  amount: number;
+  expiry: string;
+  isUsed: boolean;
+  createdAt: string;
+  note?: string;
+}
+
 const VoucherList = () => {
-  const [vouchers, setVouchers] = useState([]);
+  const [vouchers, setVouchers] = useState<Voucher[]>([]); // Voucher 배열 타입 지정
   const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(50); // 50개 또는 100개 단위
