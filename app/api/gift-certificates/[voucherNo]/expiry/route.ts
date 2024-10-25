@@ -4,14 +4,31 @@ import dbConnect from '@/lib/mongodb';
 import GiftCertificate from '@/models/GiftCertificate';
 
 export async function PUT(request: Request, { params }: { params: { voucherNo: string } }) {
-  await dbConnect();
+  await dbConnect(); // MongoDB 연결
+
   const { voucherNo } = params;
-  const { expiry } = await request.json();
+
+  if (!voucherNo) {
+    return NextResponse.json({ error: 'Voucher number is required' }, { status: 400 });
+  }
 
   try {
+    const { expiry } = await request.json();
+
+    if (!expiry) {
+      return NextResponse.json({ error: 'Expiry date is required' }, { status: 400 });
+    }
+
+    // 만료일을 Date 객체로 변환
+    const expiryDate = new Date(expiry);
+    if (isNaN(expiryDate.getTime())) {
+      return NextResponse.json({ error: 'Invalid expiry date format' }, { status: 400 });
+    }
+
+    // 바우처 만료일 업데이트
     const updatedVoucher = await GiftCertificate.findOneAndUpdate(
       { voucherNo },
-      { expiry },
+      { expiry: expiryDate },
       { new: true }
     );
 
@@ -19,9 +36,9 @@ export async function PUT(request: Request, { params }: { params: { voucherNo: s
       return NextResponse.json({ error: 'Voucher not found' }, { status: 404 });
     }
 
-    return NextResponse.json(updatedVoucher);
+    return NextResponse.json({ message: 'Voucher expiry updated successfully', updatedVoucher });
   } catch (error) {
-    console.error(error); 
+    console.error('Error updating voucher expiry:', error);
     return NextResponse.json({ error: 'Failed to update expiry' }, { status: 500 });
   }
 }
