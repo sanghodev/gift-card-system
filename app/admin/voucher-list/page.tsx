@@ -15,6 +15,7 @@ interface Voucher {
 const VoucherList = () => {
   const [vouchers, setVouchers] = useState<Voucher[]>([]); // Voucher 배열 타입 지정
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null); // 에러 상태 추가
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(50); // 50개 또는 100개 단위
   const [page, setPage] = useState(1);
@@ -27,6 +28,7 @@ const VoucherList = () => {
   // fetchVouchers 함수 메모이제이션
   const fetchVouchers = useCallback(async () => {
     setLoading(true);
+    setError(null); // 에러 초기화
     const query = new URLSearchParams({
       limit: limit.toString(),
       page: page.toString(),
@@ -37,12 +39,25 @@ const VoucherList = () => {
       to: toDate, // 날짜 필터링에 사용
     });
 
-    const response = await fetch(`/api/gift-certificates?${query.toString()}`);
-    const data = await response.json();
+    try {
+      const response = await fetch(`/api/gift-certificates?${query.toString()}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch vouchers');
+      }
 
-    setVouchers(data.vouchers);
-    setTotal(data.total);
-    setLoading(false);
+      const data = await response.json();
+      if (!data || typeof data !== 'object' || !Array.isArray(data.vouchers)) {
+        throw new Error('Invalid response format');
+      }
+
+      setVouchers(data.vouchers);
+      setTotal(data.total);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   }, [limit, page, search, amountFilter, isUsedFilter, fromDate, toDate]);
 
   useEffect(() => {
@@ -59,23 +74,34 @@ const VoucherList = () => {
   };
 
   const toggleUsage = async (voucherNo: string, isUsed: boolean) => {
-    const response = await fetch(`/api/gift-certificates/${voucherNo}/toggle-used`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ isUsed: !isUsed }),
-    });
+    try {
+      const response = await fetch(`/api/gift-certificates/${voucherNo}/toggle-used`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isUsed: !isUsed }),
+      });
 
-    if (response.ok) {
+      if (!response.ok) {
+        throw new Error('Failed to update voucher usage');
+      }
+
       setVouchers((prevVouchers) =>
         prevVouchers.map((voucher) =>
           voucher.voucherNo === voucherNo ? { ...voucher, isUsed: !isUsed } : voucher
         )
       );
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      alert(errorMessage); // 에러 경고 표시
     }
   };
 
   if (loading) {
     return <div className="text-center py-10">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-10 text-red-500">{error}</div>;
   }
 
   return (
