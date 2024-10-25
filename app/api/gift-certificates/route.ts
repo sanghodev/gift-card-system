@@ -2,6 +2,13 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import GiftCertificate from '@/models/GiftCertificate'; // 실제 모델 가져오기
 
+interface Query {
+  voucherNo?: { $regex: string; $options: string };
+  amount?: number;
+  isUsed?: boolean;
+  createdAt?: { $gte?: Date; $lte?: Date };
+}
+
 export async function GET(request: Request) {
   await dbConnect(); // MongoDB 연결
 
@@ -9,7 +16,7 @@ export async function GET(request: Request) {
   const { search, amount, isUsed, from, to, limit = '50', page = '1' } = Object.fromEntries(new URL(request.url).searchParams);
 
   // 쿼리 객체 생성
-  const query: any = {};
+  const query: Query = {}; // 명확한 타입 지정
 
   if (amount) query.amount = Number(amount); // amount를 숫자로 변환하여 쿼리
   if (isUsed !== undefined) query.isUsed = isUsed === 'true'; // true/false 필터링
