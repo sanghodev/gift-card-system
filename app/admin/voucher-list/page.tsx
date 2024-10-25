@@ -11,8 +11,8 @@ const VoucherList = () => {
   const [search, setSearch] = useState('');
   const [amountFilter, setAmountFilter] = useState('');
   const [isUsedFilter, setIsUsedFilter] = useState('');
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
+  const [fromDate, setFromDate] = useState(''); // 시작 날짜
+  const [toDate, setToDate] = useState(''); // 종료 날짜
 
   // fetchVouchers 함수 메모이제이션
   const fetchVouchers = useCallback(async () => {
@@ -23,8 +23,8 @@ const VoucherList = () => {
       search,
       amount: amountFilter,
       isUsed: isUsedFilter,
-      from: fromDate,
-      to: toDate,
+      from: fromDate, // 날짜 필터링에 사용
+      to: toDate, // 날짜 필터링에 사용
     });
 
     const response = await fetch(`/api/gift-certificates?${query.toString()}`);
@@ -81,6 +81,7 @@ const VoucherList = () => {
           onChange={(e) => setSearch(e.target.value)}
           className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary"
         />
+
         <select
           value={amountFilter}
           onChange={(e) => setAmountFilter(e.target.value)}
@@ -91,6 +92,7 @@ const VoucherList = () => {
           <option value="50">$50</option>
           <option value="75">$75</option>
         </select>
+
         <select
           value={isUsedFilter}
           onChange={(e) => setIsUsedFilter(e.target.value)}
@@ -100,6 +102,22 @@ const VoucherList = () => {
           <option value="true">Used Vouchers</option>
           <option value="false">Unused Vouchers</option>
         </select>
+
+        {/* 날짜 필터 UI */}
+        <input
+          type="date"
+          value={fromDate}
+          onChange={(e) => setFromDate(e.target.value)}
+          className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary"
+          placeholder="From Date"
+        />
+        <input
+          type="date"
+          value={toDate}
+          onChange={(e) => setToDate(e.target.value)}
+          className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-primary"
+          placeholder="To Date"
+        />
       </div>
 
       {/* 테이블 형식으로 바우처 리스트 표시 */}
