@@ -7,6 +7,7 @@ if (!MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
 }
 
+// 전역 mongoose 캐시 사용
 let cached = global.mongoose;
 
 if (!cached) {
@@ -23,6 +24,7 @@ async function dbConnect() {
       bufferCommands: false,
     }).then((mongoose) => mongoose);
   }
+
   cached.conn = await cached.promise;
   return cached.conn;
 }
