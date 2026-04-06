@@ -1,0 +1,35 @@
+npm : npm ERR! code ERESOLVE
+At line:1 char:1
++ npm install next@latest eslint-config-next@latest > npm_err.log 
+2>&1
++ 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm ERR! code ERESOLVE 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+npm ERR! ERESOLVE unable to resolve dependency tree
+npm ERR! 
+npm ERR! While resolving: gift-card-system@0.1.0
+npm ERR! Found: react@19.0.0-rc-69d4b800-20241021
+npm ERR! node_modules/react
+npm ERR!   react@"19.0.0-rc-69d4b800-20241021" from the root project
+npm ERR! 
+npm ERR! Could not resolve dependency:
+npm ERR! peer react@"^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || 
+^19.0.0" from next@16.2.2
+npm ERR! node_modules/next
+npm ERR!   next@"16.2.2" from the root project
+npm ERR! 
+npm ERR! Fix the upstream dependency conflict, or retry
+npm ERR! this command with --force or --legacy-peer-deps
+npm ERR! to accept an incorrect (and potentially broken) dependency 
+resolution.
+npm ERR! 
+npm ERR! 
+npm ERR! For a full report see:
+npm ERR! C:\Users\hp\AppData\Roaming\npm\_logs\2026-04-06T15_32_52_4
+51Z-eresolve-report.txt
+
+npm ERR! A complete log of this run can be found in: C:\Users\hp\App
+Data\Roaming\npm\_logs\2026-04-06T15_32_52_451Z-debug-0.log
