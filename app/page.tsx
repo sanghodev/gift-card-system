@@ -13,7 +13,7 @@ const HomePage = () => {
           className="block p-6 bg-white shadow-card rounded-lg hover:shadow-xl transition-all duration-300"
         >
           <h2 className="text-xl font-semibold text-secondary mb-2">Create Gift Card</h2>
-          <p className="text-gray-600">Create a new gift card for your store.</p>
+          <p className="text-gray-600">Create a new gift card for your store..</p>
         </Link>
 
         {/* Check Voucher */}
@@ -22,7 +22,7 @@ const HomePage = () => {
           className="block p-6 bg-white shadow-card rounded-lg hover:shadow-xl transition-all duration-300"
         >
           <h2 className="text-xl font-semibold text-secondary mb-2">Check Voucher</h2>
-          <p className="text-gray-600">Check the status of an existing voucher.</p>
+          <p className="text-gray-600">Check the status of an existing voucher..</p>
         </Link>
 
         {/* Manage Vouchers */}
@@ -31,7 +31,7 @@ const HomePage = () => {
           className="block p-6 bg-white shadow-card rounded-lg hover:shadow-xl transition-all duration-300"
         >
           <h2 className="text-xl font-semibold text-secondary mb-2">Manage Vouchers</h2>
-          <p className="text-gray-600">View and manage all vouchers in the system.</p>
+          <p className="text-gray-600">View and manage all vouchers in the system..</p>
         </Link>
       </div>
     </div>
