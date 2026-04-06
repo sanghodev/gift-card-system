@@ -44,60 +44,64 @@ const CreateVoucher = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex flex-col h-full">
-      <h2 className="text-2xl font-bold mb-6 text-primary">Issue New Voucher</h2>
+    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex flex-col">
+      <h2 className="text-xl font-bold mb-4 text-primary">Issue New Voucher</h2>
 
       {/* 성공 여부에 따라 리뷰 표시 */}
       {success && voucherDetails && (
-        <div className="mb-6 p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg text-sm">
-          <h3 className="font-semibold mb-2">Voucher Created!</h3>
-          <p><strong>No:</strong> {voucherDetails.voucherNo}</p>
-          <p><strong>Amount:</strong> ${voucherDetails.amount}</p>
-          <p><strong>Expiry:</strong> {new Date(voucherDetails.expiry).toLocaleDateString()}</p>
-          {voucherDetails.note && <p><strong>Note:</strong> {voucherDetails.note}</p>}
+        <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-800 rounded-lg text-sm">
+          <h3 className="font-semibold mb-1">Voucher Created!</h3>
+          <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+            <p><strong>No:</strong> {voucherDetails.voucherNo}</p>
+            <p><strong>Amount:</strong> ${voucherDetails.amount}</p>
+            <p className="col-span-2"><strong>Expiry:</strong> {new Date(voucherDetails.expiry).toLocaleDateString()}</p>
+            {voucherDetails.note && <p className="col-span-2 truncate"><strong>Note:</strong> {voucherDetails.note}</p>}
+          </div>
         </div>
       )}
 
-      <div className="flex flex-col gap-4 flex-grow">
-        <div>
-          <label className="block mb-1 text-sm font-medium text-gray-700">Amount</label>
-          <select
-            value={amount}
-            onChange={(e) => setAmount(Number(e.target.value))}
-            className="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-primary shadow-sm"
-          >
-            <option value={30}>$30</option>
-            <option value={50}>$50</option>
-            <option value={75}>$75</option>
-          </select>
+      <div className="flex flex-col gap-3">
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block mb-1 text-xs font-medium text-gray-700">Amount</label>
+            <select
+              value={amount}
+              onChange={(e) => setAmount(Number(e.target.value))}
+              className="w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary shadow-sm"
+            >
+              <option value={30}>$30</option>
+              <option value={50}>$50</option>
+              <option value={75}>$75</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block mb-1 text-xs font-medium text-gray-700">Expiry Date</label>
+            <input
+              type="date"
+              value={expiry}
+              onChange={(e) => setExpiry(e.target.value)}
+              className="w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary shadow-sm"
+            />
+          </div>
         </div>
 
         <div>
-          <label className="block mb-1 text-sm font-medium text-gray-700">Expiry Date</label>
-          <input
-            type="date"
-            value={expiry}
-            onChange={(e) => setExpiry(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-primary shadow-sm"
-          />
-        </div>
-
-        <div>
-          <label className="block mb-1 text-sm font-medium text-gray-700">Optional Note</label>
+          <label className="block mb-1 text-xs font-medium text-gray-700">Optional Note</label>
           <textarea
             placeholder="Add note here..."
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-primary shadow-sm"
-            rows={3}
+            className="w-full border border-gray-300 rounded p-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary shadow-sm"
+            rows={2}
           />
         </div>
 
-        <div className="mt-auto pt-4">
+        <div className="mt-1">
           <button
             onClick={createGiftCard}
             disabled={loading}
-            className={`w-full py-2.5 px-4 rounded-lg text-white font-semibold shadow transition-colors ${
+            className={`w-full py-2 px-4 rounded text-white font-semibold text-sm shadow transition-colors ${
               loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-blue-700'
             }`}
           >
