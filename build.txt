@@ -1,0 +1,72 @@
+
+> gift-card-system@0.1.0 build
+> next build
+
+  ▲ Next.js 15.0.1
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+npm : Error: Please define the MONGODB_URI environment variable 
+inside .env.local
+At line:1 char:1
++ npm run build > build_output.log 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Error: Please d...side 
+    .env.local:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+    at 647 (C:\Users\hp\Documents\GitHub\gift-card-system\.next\serv
+er\app\api\gift-certificates\[voucherNo]\toggle-used\route.js:1:2091
+)
+    at t (C:\Users\hp\Documents\GitHub\gift-card-system\.next\server
+\webpack-runtime.js:1:127)
+    at 9808 (C:\Users\hp\Documents\GitHub\gift-card-system\.next\ser
+ver\app\api\gift-certificates\[voucherNo]\toggle-used\route.js:1:738
+)
+    at t (C:\Users\hp\Documents\GitHub\gift-card-system\.next\server
+\webpack-runtime.js:1:127)
+    at r (C:\Users\hp\Documents\GitHub\gift-card-system\.next\server
+\app\api\gift-certificates\[voucherNo]\toggle-used\route.js:1:2816)
+    at C:\Users\hp\Documents\GitHub\gift-card-system\.next\server\ap
+p\api\gift-certificates\[voucherNo]\toggle-used\route.js:1:2847
+    at t.X (C:\Users\hp\Documents\GitHub\gift-card-system\.next\serv
+er\webpack-runtime.js:1:2120)
+    at C:\Users\hp\Documents\GitHub\gift-card-system\.next\server\ap
+p\api\gift-certificates\[voucherNo]\toggle-used\route.js:1:2829
+    at Object.<anonymous> (C:\Users\hp\Documents\GitHub\gift-card-sy
+stem\.next\server\app\api\gift-certificates\[voucherNo]\toggle-used\
+route.js:1:2874)
+    at Module._compile (node:internal/modules/cjs/loader:1241:14)
+Error: Please define the MONGODB_URI environment variable inside 
+.env.local
+    at 647 (C:\Users\hp\Documents\GitHub\gift-card-system\.next\serv
+er\app\api\gift-certificates\route.js:1:2065)
+    at t (C:\Users\hp\Documents\GitHub\gift-card-system\.next\server
+\webpack-runtime.js:1:127)
+    at 6073 (C:\Users\hp\Documents\GitHub\gift-card-system\.next\ser
+ver\app\api\gift-certificates\route.js:1:738)
+    at t (C:\Users\hp\Documents\GitHub\gift-card-system\.next\server
+\webpack-runtime.js:1:127)
+    at r (C:\Users\hp\Documents\GitHub\gift-card-system\.next\server
+\app\api\gift-certificates\route.js:1:2784)
+    at C:\Users\hp\Documents\GitHub\gift-card-system\.next\server\ap
+p\api\gift-certificates\route.js:1:2815
+    at t.X (C:\Users\hp\Documents\GitHub\gift-card-system\.next\serv
+er\webpack-runtime.js:1:2120)
+    at C:\Users\hp\Documents\GitHub\gift-card-system\.next\server\ap
+p\api\gift-certificates\route.js:1:2797
+    at Object.<anonymous> (C:\Users\hp\Documents\GitHub\gift-card-sy
+stem\.next\server\app\api\gift-certificates\route.js:1:2842)
+    at Module._compile (node:internal/modules/cjs/loader:1241:14)
+
+> Build error occurred
+Error: Failed to collect page data for 
+/api/gift-certificates/[voucherNo]/toggle-used
+    at C:\Users\hp\Documents\GitHub\gift-card-system\node_modules\ne
+xt\dist\build\utils.js:1233:15
+    at process.processTicksAndRejections 
+(node:internal/process/task_queues:95:5) {
+  type: 'Error'
+}
