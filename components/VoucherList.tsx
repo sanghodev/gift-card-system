@@ -9,6 +9,7 @@ interface Voucher {
   expiry: string;
   isUsed: boolean;
   createdAt: string;
+  usedAt?: string;
   note?: string;
 }
 
@@ -201,8 +202,10 @@ const VoucherList = () => {
             <tr>
               <th className="py-3 px-4 text-left font-semibold">Voucher No</th>
               <th className="py-3 px-4 text-left font-semibold">Amount</th>
+              <th className="py-3 px-4 text-left font-semibold">Created On</th>
               <th className="py-3 px-4 text-left font-semibold">Expiry</th>
               <th className="py-3 px-4 text-left font-semibold text-center">Status</th>
+              <th className="py-3 px-4 text-left font-semibold text-center">Used On</th>
               <th className="py-3 px-4 text-left font-semibold text-center">Notes</th>
               <th className="py-3 px-4 text-left font-semibold">Actions</th>
             </tr>
@@ -213,11 +216,15 @@ const VoucherList = () => {
                 <tr key={voucher.voucherNo} className="hover:bg-blue-50/50 transition-colors">
                   <td className="py-3 px-4 font-mono text-xs">{voucher.voucherNo}</td>
                   <td className="py-3 px-4 font-semibold text-gray-800">${voucher.amount}</td>
+                  <td className="py-3 px-4 text-gray-500">{new Date(voucher.createdAt).toLocaleDateString()}</td>
                   <td className="py-3 px-4 text-gray-500">{new Date(voucher.expiry).toLocaleDateString()}</td>
                   <td className="py-3 px-4 text-center">
                     <span className={`px-2.5 py-1 text-xs font-semibold rounded-full ${voucher.isUsed ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
                       {voucher.isUsed ? 'Used' : 'Valid'}
                     </span>
+                  </td>
+                  <td className="py-3 px-4 text-center text-gray-500 text-xs">
+                    {voucher.usedAt ? new Date(voucher.usedAt).toLocaleDateString() : '-'}
                   </td>
                   <td className="py-3 px-4 text-gray-500 text-center max-w-[120px]" title={voucher.note || 'Click to edit'}>
                     {editingNoteId === voucher.voucherNo ? (
@@ -258,7 +265,7 @@ const VoucherList = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={6} className="py-12 text-center text-gray-500">
+                <td colSpan={8} className="py-12 text-center text-gray-500">
                   No vouchers found.
                 </td>
               </tr>

@@ -7,6 +7,7 @@ export interface GiftCertificate extends Document {
   isUsed: boolean;
   note?: string; // 선택적인 노트 필드 추가
   createdAt: Date;
+  usedAt?: Date; // 사용 일자 필드 추가
 }
 
 const GiftCertificateSchema: Schema = new Schema(
@@ -16,6 +17,7 @@ const GiftCertificateSchema: Schema = new Schema(
     expiry: { type: Date, required: true },
     isUsed: { type: Boolean, default: false },
     note: { type: String, default: '' }, // 노트 필드 추가
+    usedAt: { type: Date, default: null }, // 사용 일자 저장
   },
   { timestamps: true }
 );

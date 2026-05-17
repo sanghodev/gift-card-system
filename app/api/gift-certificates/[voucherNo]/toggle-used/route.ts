@@ -23,9 +23,12 @@ export async function PUT(request: NextRequest) {
     }
 
     // 사용 여부를 토글
+    const newIsUsed = !voucher.isUsed;
+    const usedAtDate = newIsUsed ? new Date() : null;
+
     const updatedVoucher = await GiftCertificate.findOneAndUpdate(
       { voucherNo },
-      { isUsed: !voucher.isUsed },
+      { isUsed: newIsUsed, usedAt: usedAtDate },
       { new: true }
     );
 

@@ -19,7 +19,9 @@ export async function GET(request: Request) {
   const query: Query = {}; // 명확한 타입 지정
 
   if (amount) query.amount = Number(amount); // amount를 숫자로 변환하여 쿼리
-  if (isUsed !== undefined) query.isUsed = isUsed === 'true'; // true/false 필터링
+  if (isUsed === 'true' || isUsed === 'false') {
+    query.isUsed = isUsed === 'true'; // 명확한 true/false 값일 때만 필터링
+  }
   if (search) query.voucherNo = { $regex: search, $options: 'i' }; // 바우처 번호 검색
 
   // 날짜 필터링
