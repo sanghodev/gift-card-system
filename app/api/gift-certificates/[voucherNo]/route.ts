@@ -28,3 +28,33 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Failed to fetch voucher' }, { status: 500 });
   }
 }
+
+export async function PATCH(request: NextRequest) {
+  await dbConnect();
+
+  const { pathname } = new URL(request.url);
+  const voucherNo = pathname.split('/').slice(-1)[0];
+
+  if (!voucherNo) {
+    return NextResponse.json({ error: 'Voucher number is required' }, { status: 400 });
+  }
+
+  try {
+    const { note } = await request.json();
+
+    const voucher = await GiftCertificate.findOneAndUpdate(
+      { voucherNo },
+      { note },
+      { new: true }
+    );
+
+    if (!voucher) {
+      return NextResponse.json({ error: 'Voucher not found' }, { status: 404 });
+    }
+
+    return NextResponse.json(voucher);
+  } catch (error) {
+    console.error('Error updating voucher note:', error);
+    return NextResponse.json({ error: 'Failed to update voucher note' }, { status: 500 });
+  }
+}

@@ -25,6 +25,10 @@ const VoucherList = () => {
   const [isUsedFilter, setIsUsedFilter] = useState('');
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
+  
+  // Note inline editing states
+  const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
+  const [editingNoteValue, setEditingNoteValue] = useState('');
 
   // 검색어 입력 시 300ms 후에 API 요청을 하도록 디바운스 처리 (문자가 끊기는 버그 해결)
   useEffect(() => {
@@ -106,6 +110,23 @@ const VoucherList = () => {
     }
   };
 
+  const updateNote = async (voucherNo: string, newNote: string) => {
+    try {
+      const response = await fetch(`/api/gift-certificates/${voucherNo}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ note: newNote }),
+      });
+      if (!response.ok) throw new Error('Failed to update note');
+      
+      setVouchers(prev => prev.map(v => v.voucherNo === voucherNo ? { ...v, note: newNote } : v));
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : 'Unknown error');
+    } finally {
+      setEditingNoteId(null);
+    }
+  };
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex flex-col h-full">
       <div className="flex justify-between items-center mb-6">
@@ -119,8 +140,24 @@ const VoucherList = () => {
         </div>
       )}
 
+      {/* 직관적인 Status 탭 (기존 Dropdown을 대체) */}
+      <div className="flex space-x-4 mb-5 border-b border-gray-200">
+        <button 
+          onClick={() => { setIsUsedFilter(''); setPage(1); }}
+          className={`pb-2 px-1 text-sm font-semibold transition-colors border-b-2 ${!isUsedFilter ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-800'}`}
+        >All Vouchers</button>
+        <button 
+          onClick={() => { setIsUsedFilter('false'); setPage(1); }}
+          className={`pb-2 px-1 text-sm font-semibold transition-colors border-b-2 ${isUsedFilter === 'false' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-800'}`}
+        >Valid (Unused)</button>
+        <button 
+          onClick={() => { setIsUsedFilter('true'); setPage(1); }}
+          className={`pb-2 px-1 text-sm font-semibold transition-colors border-b-2 ${isUsedFilter === 'true' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-800'}`}
+        >Already Used</button>
+      </div>
+
       {/* 필터 및 검색 UI */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 mb-6">
         <input
           type="text"
           placeholder="Search by ID..."
@@ -138,16 +175,6 @@ const VoucherList = () => {
           <option value="30">$30</option>
           <option value="50">$50</option>
           <option value="75">$75</option>
-        </select>
-
-        <select
-          value={isUsedFilter}
-          onChange={(e) => { setIsUsedFilter(e.target.value); setPage(1); }}
-          className="border border-gray-300 rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-primary shadow-sm text-sm"
-        >
-          <option value="">All Statuses</option>
-          <option value="true">Used Only</option>
-          <option value="false">Unused Only</option>
         </select>
 
         {/* 날짜 필터 UI */}
@@ -192,8 +219,28 @@ const VoucherList = () => {
                       {voucher.isUsed ? 'Used' : 'Valid'}
                     </span>
                   </td>
-                  <td className="py-3 px-4 text-gray-500 max-w-[120px] truncate text-center" title={voucher.note || 'No note'}>
-                    {voucher.note || '-'}
+                  <td className="py-3 px-4 text-gray-500 text-center max-w-[120px]" title={voucher.note || 'Click to edit'}>
+                    {editingNoteId === voucher.voucherNo ? (
+                      <input
+                        autoFocus
+                        type="text"
+                        value={editingNoteValue}
+                        onChange={(e) => setEditingNoteValue(e.target.value)}
+                        onBlur={() => updateNote(voucher.voucherNo, editingNoteValue)}
+                        onKeyDown={(e) => { if (e.key === 'Enter') updateNote(voucher.voucherNo, editingNoteValue); }}
+                        className="w-full border border-primary rounded p-1 text-xs outline-none"
+                      />
+                    ) : (
+                      <div 
+                        className="cursor-text hover:bg-gray-100 p-1.5 rounded truncate border border-transparent hover:border-gray-300 transition-colors text-xs"
+                        onClick={() => {
+                          setEditingNoteId(voucher.voucherNo);
+                          setEditingNoteValue(voucher.note || '');
+                        }}
+                      >
+                        {voucher.note || <span className="text-gray-300 italic">Add note...</span>}
+                      </div>
+                    )}
                   </td>
                   <td className="py-3 px-4 text-right">
                     <button
